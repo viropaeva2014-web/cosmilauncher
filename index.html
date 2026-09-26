@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberOS Store — Скачать Linux Engine</title>
+    <style>
+        /* Стиль хакерского неонового терминала */
+        body {
+            background-color: #05060b;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 95vh;
+        }
+
+        .terminal-box {
+            background: rgba(13, 15, 24, 0.9);
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 30px #ff007f, inset 0 0 15px rgba(255, 0, 127, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #00ffcc;
+            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #888e9b;
+            font-size: 11px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .download-zone {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        /* Кроссплатформенные неоновые кнопки */
+        .neon-btn {
+            display: block;
+            background: transparent;
+            padding: 16px;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            text-decoration: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        /* Android - Зеленый неон */
+        .android-btn {
+            color: #00ffcc;
+            border: 2px solid #00ffcc;
+            text-shadow: 0 0 5px #00ffcc;
+        }
+        .android-btn:active { background: #00ffcc; color: #05060b; box-shadow: 0 0 25px #00ffcc; }
+
+        /* iOS без ПК - Розовый неон */
+        .ios-btn {
+            color: #ff007f;
+            border: 2px solid #ff007f;
+            text-shadow: 0 0 5px #ff007f;
+        }
+        .ios-btn:active { background: #ff007f; color: #05060b; box-shadow: 0 0 25px #ff007f; }
+
+        /* macOS - Фиолетовый неон */
+        .mac-btn {
+            color: #a200ff;
+            border: 2px solid #a200ff;
+            text-shadow: 0 0 5px #a200ff;
+        }
+        .mac-btn:active { background: #a200ff; color: #05060b; box-shadow: 0 0 25px #a200ff; }
+
+        /* Windows - Синий неон */
+        .win-btn {
+            color: #00bcff;
+            border: 2px solid #00bcff;
+            text-shadow: 0 0 5px #00bcff;
+        }
+        .win-btn:active { background: #00bcff; color: #05060b; box-shadow: 0 0 25px #00bcff; }
+
+        .badge {
+            font-size: 9px;
+            background: #1c1e29;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+            border: 1px solid currentColor;
+        }
+
+        .system-status {
+            margin-top: 35px;
+            font-size: 11px;
+            color: #555c6d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="terminal-box">
+        <h1>> CYBER_OS_STORE</h1>
+        <div class="subtitle">Скачать официальные приложения CyberOS</div>
+
+        <div class="download-zone">
+            <!-- Кнопка Android -->
+            <a href="CyberOS.apk" class="neon-btn android-btn" download onclick="alert('Скачивание CyberOS.apk...')">
+                СКАЧАТЬ ДЛЯ ANDROID [.APK]
+            </a>
+
+            <!-- Кнопка iOS по беспроводу через созданный manifest.plist -->
+            <a href="itms-services://?action=download-manifest&url=https://github.io" class="neon-btn ios-btn">
+                УСТАНОВИТЬ НА IOS <span class="badge">БЕЗ КОМПЬЮТЕРА</span>
+            </a>
+
+            <!-- Кнопка macOS, использующая Info.plist при сборке -->
+            <a href="CyberOS_Mac.dmg" class="neon-btn mac-btn" download onclick="alert('Скачивание CyberOS_Mac.dmg...')">
+                СКАЧАТЬ ДЛЯ MACOS [.DMG]
+            </a>
+
+            <!-- Кнопка Windows -->
+            <a href="CyberOS_Win.exe" class="neon-btn win-btn" download onclick="alert('Скачивание CyberOS_Win.exe...')">
+                СКАЧАТЬ ДЛЯ WINDOWS [.EXE]
+            </a>
+        </div>
+
+        <div class="system-status">STATUS: WEB_PORTAL_ACTIVE // CORE READY</div>
+    </div>
+
+</body>
+</html>
