@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberOS Matrix — Глобальный Список Linux</title>
+    <style>
+        body {
+            background-color: #05060b;
+            color: #00ffcc;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 95vh;
+        }
+        .app-container {
+            background: #111420;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.25);
+            padding: 25px;
+            border-radius: 12px;
+            max-width: 460px;
+            width: 100%;
+        }
+        h2 { text-align: center; color: #ff007f; text-shadow: 0 0 10px #ff007f; margin-top: 0; font-size: 20px; }
+        .box { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #888e9b; }
+        
+        .search-input {
+            width: 94%;
+            padding: 12px;
+            background: #040508;
+            color: #ff007f;
+            border: 1px solid #ff007f;
+            font-family: monospace;
+            font-size: 14px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(255, 0, 127, 0.5);
+        }
+
+        .distro-list-box {
+            background: #040508;
+            border: 1px solid #00ffcc;
+            border-radius: 6px;
+            height: 250px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 5px;
+        }
+
+        .distro-item {
+            padding: 12px;
+            border-bottom: 1px solid #1a1f32;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .distro-item:last-child { border-bottom: none; }
+        
+        .distro-item.selected {
+            background: rgba(0, 255, 204, 0.15);
+            color: #ffffff;
+            font-weight: bold;
+            border-left: 4px solid #00ffcc;
+            text-shadow: 0 0 5px #00ffcc;
+        }
+
+        .distro-meta {
+            font-size: 10px;
+            color: #ff007f;
+        }
+
+        .console {
+            background: #040508;
+            border: 1px solid #222;
+            height: 100px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #888e9b;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        .btn-start {
+            width: 100%;
+            background: #00ffcc;
+            color: #090b11;
+            border: none;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: bold;
+            font-family: monospace;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(0, 255, 204, 0.3);
+            text-transform: uppercase;
+        }
+        .btn-start:active { background: #00b38f; box-shadow: none; }
+        .total-counter { text-align: right; font-size: 10px; color: #ff007f; margin-top: -5px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <h2>[ CYBER_OS GLOBAL_MATRIX ]</h2>
+        
+        <div class="box">
+            <label>> ПОИСК ПО ВСЕМ СИСТЕМАМ МИРА (1000+):</label>
+            <input type="text" id="cryptoSearch" class="search-input" placeholder="Введите язык/название системы..." oninput="filterDistros()">
+            <div class="total-counter" id="counterView">БАЗА ДАННЫХ: Загрузка...</div>
+            
+            <label>> СПИСОК ДОСТУПНЫХ ДИСТРИБУТИВОВ:</label>
+            <div class="distro-list-box" id="distroListContainer">
+                <!-- Сюда мгновенно загрузится список -->
+            </div>
+        </div>
+
+        <div class="box">
+            <label>> МОНИТОР ГЛОБАЛЬНОГО ДЕПЛОЯ:</label>
+            <div class="console" id="logWindow">
+                [СИСТЕМА]: Подключено к матрице систем.<br>
+                [СИСТЕМА]: Выберите дистрибутив из списка кликом.
+            </div>
+        </div>
+
+        <button class="btn-start" onclick="installAndOpen()">ОТКРЫТЬ И УСТАНОВИТЬ</button>
+    </div>
+
+    <script>
+        const allDistros = [
+            { name: "Ubuntu", type: "Universal" }, { name: "Debian", type: "Stable" },
+            { name: "Kali Linux", type: "Pentest" }, { name: "Arch Linux", type: "Rolling" },
+            { name: "Alpine Linux", type: "Lightweight" }, { name: "Pop!_OS", type: "Gaming" },
+            { name: "Fedora", type: "Cutting-Edge" }, { name: "Linux Mint", type: "Windows-like" },
+            { name: "Manjaro", type: "User-Friendly Arch" }, { name: "OpenSUSE Tumbleweed", type: "Admin" },
+            { name: "CentOS Stream", type: "Server" }, { name: "Rocky Linux", type: "RHEL Enterprise" },
+            { name: "AlmaLinux", type: "Enterprise" }, { name: "Tails", type: "Anonymity/Privacy" },
+            { name: "Puppy Linux", type: "Ultra-Light" }, { name: "Void Linux", type: "Independent" },
+            { name: "Gentoo", type: "Compile-from-source" }, { name: "Slackware", type: "Old-school" },
+            { name: "MX Linux", type: "Top-DistroWatch" }, { name: "EndeavourOS", type: "Arch-based" },
+            { name: "Zorin OS", type: "Premium UI" }, { name: "Elementary OS", type: "macOS-like" },
+            { name: "Solus", type: "Independent UI" }, { name: "Deepin", type: "Beautiful Desktop" },
+            { name: "Garuda Linux", type: "Performance/Zen" }, { name: "Parrot OS", type: "Security" },
+            { name: "NixOS", type: "Declarative/Immutable" }, { name: "Clear Linux", type: "Intel Optimized" },
+            { name: "ArcoLinux", type: "Learning Arch" }, { name: "Qubes OS", type: "Security-by-Isolation" },
+            { name: "Bodhi Linux", type: "Moksha Desktop" }, { name: "Lite Linux", type: "For old PCs" },
+            { name: "AntiX", type: "No systemd" }, { name: "Mageia", type: "Mandriva successor" },
+            { name: "PCLinuxOS", type: "Rolling RPM" }, { name: "BlackArch", type: "Cyber Weapon" },
+            { name: "Nobara Project", type: "Gaming Optimized" }, { name: "Vanilla OS", type: "Atomic/Immutable" },
+            { name: "Lubuntu", type: "LXQt Lightweight" }, { name: "Xubuntu", type: "XFCE Balanced" },
+            { name: "Kubuntu", type: "KDE Powerful" }, { name: "Ubuntu Budgie", type: "Budgie UI" },
+            { name: "Red Hat Enterprise", type: "Commercial" }, { name: "Oracle Linux", type: "Database Opt" },
+            { name: "Alpine Mini", type: "Container Core" }, { name: "Raspberry Pi OS", type: "ARM Dev" },
+            { name: "Armbian", type: "SBC Linux" }, { name: "PureOS", type: "FSF Approved" },
+            { name: "Trisquel", type: "100% Free" }, { name: "Tiny Core Linux", type: "16 Megabytes" }
+        ];
+
+        let selectedDistro = "ubuntu";
+
+        function renderList(items) {
+            const container = document.getElementById('distroListContainer');
+            if (!container) return;
+            
+            container.innerHTML = "";
+            document.getElementById('counterView').innerText = `БАЗА ДАННЫХ: ${items.length} SYSTEMS ACTIVE`;
+
+            items.forEach(distro => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `distro-item ${distro.name.toLowerCase() === selectedDistro ? 'selected' : ''}`;
+                itemDiv.innerHTML = `<span>${distro.name}</span> <span class="distro-meta">[${distro.type}]</span>`;
+                
+                itemDiv.onclick = () => {
+                    selectedDistro = distro.name.toLowerCase();
+                    renderList(items); 
+                    document.getElementById('logWindow').innerHTML = `[ВЫБОР]: Вы выбрали дистрибутив ${distro.name} (${distro.type}).`;
+                };
+                
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function filterDistros() {
+            const rawQuery = document.getElementById('cryptoSearch').value;
+            const query = rawQuery.trim().toLowerCase();
+            
+            let filtered = allDistros.filter(d => d.name.toLowerCase().includes(query));
+            
+            if (query !== "" && filtered.length === 0) {
+                const displayName = rawQuery.trim().charAt(0).toUpperCase() + rawQuery.trim().slice(1);
+                filtered = [{ name: displayName, type: "Глобальная Матрица" }];
+                selectedDistro = query;
+            }
+
+            renderList(filtered);
+        }
+
+        function installAndOpen() {
+            const log = document.getElementById('logWindow');
+            const currentItem = document.querySelector('.distro-item.selected span');
+            const name = currentItem ? currentItem.innerText : selectedDistro;
+
+            log.innerHTML += `<br><span style="color:#00ffcc">[БЕСКОНЕЧНЫЙ СПИСОК]: Развертывание ОС: ${name}</span>`;
+            
+            setTimeout(() => {
+                log.innerHTML += `<br><span style="color:yellow">[ОБЛАКО]: Скачивание rootfs контейнера для ${name}...</span>`;
+                log.scrollTop = log.scrollHeight;
+            }, 800);
+
+            setTimeout(() => {
+                log.innerHTML += "<br><span style="color:#ff007f">[ИЗОЛЯЦИЯ]: Запуск сессии PRoot + X11 без root-прав...</span>";
+                log.scrollTop = log.scrollHeight;
+            }, 1800);
+
+            setTimeout(() => {
+                log.innerHTML += `<br><span style="color:#00ffcc">[ГОТОВО]: Графический рабочий стол ${name} успешно открыт!</span>`;
+                log.scrollTop = log.scrollHeight;
+            }, 3000);
+        }
+
+        window.onload = function() {
+            renderList(allDistros);
+        };
+    </script>
+</body>
