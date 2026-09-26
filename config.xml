@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.cyberteam.cyberos" version="1.0.0" xmlns="http://w3.org" xmlns:cdv="http://apache.org">
+    <name>CyberOS Client</name>
+    
+    <description>
+        Универсальный графический движок для установки и запуска 1000+ дистрибутивов Linux в один клик.
+    </description>
+    
+    <author email="dev@cyberos.ru" href="https://github.com">
+        CyberOS Development Team
+    </author>
+    
+    <content src="app.html" />
+    
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    
+    <platform name="android">
+        <preference name="AndroidPersistentFileLocation" value="Internal" />
+        <allow-intent href="market:*" />
+    </platform>
+
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+</widget>
